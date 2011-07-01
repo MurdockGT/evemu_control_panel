@@ -1774,7 +1774,11 @@ namespace Evemu_DB_Editor
 
         private void button21_Click_1(object sender, EventArgs e)
         {
-                MessageBox.Show("This will take 20+ minutes. Dump is very large");                  
+                MessageBox.Show("This will take 20+ minutes. Dump is very large");
+                ThreadPool.QueueUserWorkItem(new WaitCallback(ThreadProc));
+            
+                //Thread thread = new Thread(HandleExecute);
+                //thread.Start();
                 string sqlStr = "";    
                 StreamReader reader = new StreamReader(textBoxSQLFile.Text);
                 sqlStr = reader.ReadToEnd();
@@ -1784,6 +1788,7 @@ namespace Evemu_DB_Editor
                 MySqlCommand cmd = new MySqlCommand(query, conn);
                 conn.Open();
                 cmd.ExecuteNonQuery();
+               // thread.clo
                 MessageBox.Show("Database Populated.");
         }
 
@@ -1823,9 +1828,13 @@ namespace Evemu_DB_Editor
             }
         }
 
-       
 
-        
+
+
+
+        public ParameterizedThreadStart HandleExecute { get; set; }
+
+        public ParameterizedThreadStart textboxsql { get; set; }
     }
 }
 
